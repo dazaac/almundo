@@ -37,6 +37,13 @@ public class Dispatcher extends Thread {
 			}
 			ejes.shutdown();			
 			llamadas = llamadas - limiteLlamadas > 0 ? llamadas -limiteLlamadas :0;
+			if(!ejes.isTerminated()) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}while(llamadas != 0);
 		
 	}
