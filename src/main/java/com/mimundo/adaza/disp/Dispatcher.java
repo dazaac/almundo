@@ -67,6 +67,7 @@ public class Dispatcher extends Thread {
 			// Si no hay empleados disponibles, espera 1 segundo para volver a consultar
 			try {
 				Thread.sleep(1000);
+				dispatchCall();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
