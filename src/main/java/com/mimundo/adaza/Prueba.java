@@ -35,7 +35,6 @@ public class Prueba extends TestCase {
 		// se ordena la lista por nivel
 		Comparator<Empleado> porNivel = (o1, o2) -> o2.getNivel().compareTo(o1.getNivel());
 		Collections.sort(empleados, porNivel);
-		
 //        while(true) {       
 		//Se envía la cantidad de llamadas
         	new Dispatcher(empleados, 15);        	

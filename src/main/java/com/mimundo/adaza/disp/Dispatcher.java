@@ -7,9 +7,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import com.mimundo.adaza.dto.Director;
 import com.mimundo.adaza.dto.Empleado;
-import com.mimundo.adaza.dto.Operador;
 import com.mimundo.adaza.dto.Supervisor;
 
+/**
+ * Maneja las llamadas y estados de los empleados
+ * @author dazaac
+ *
+ */
 public class Dispatcher extends Thread {
 	
 	private static List<Empleado> empleados;
@@ -43,14 +47,19 @@ public class Dispatcher extends Thread {
 		
 	}
 
+	/**
+	 * Ejecuta el proceso de atención de llamadas
+	 */
 	public void dispatchCall(){
 		// define la duración de la llamada
 		Empleado empleadoDisponible ;
+		// obtiene el empleado disponible
 		synchronized (this) {
 			empleadoDisponible = empleadoDisponible(); 
 		}
 		if(empleadoDisponible != null) {
 			for(Empleado empleado : empleados) {
+				// obtiene el empleado de la lista
 				if(empleado.equals(empleadoDisponible)) {
 					long duracionLlamada = ThreadLocalRandom.current().nextLong(min, max + 1);
 					System.out.println(empleado.getNombre() + " atiende llamada de " + duracionLlamada/1000 + "s");
@@ -59,6 +68,7 @@ public class Dispatcher extends Thread {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					// habilita el empleado para recibir una llamada
 					empleado.setDisponible(true);
 					System.out.println(empleado.getNombre() + " está disponible");
 				}
@@ -76,38 +86,22 @@ public class Dispatcher extends Thread {
 		
 	}
 	
+	/**
+	 * Método que permite obtener el empleado disponible
+	 * @return
+	 */
 	private synchronized static Empleado empleadoDisponible() {
 		for(Empleado empleado : empleados) {
-			if(empleado instanceof Operador && empleado.isDisponible()) {
+			if(empleado.isDisponible()) {
+				System.out.println(empleado.getNombre() +  " atenderá la llamada ");
 				empleado.setDisponible(false);
 				return empleado;
 			}
+			if(empleado instanceof Supervisor)
+				System.out.println("No hay Operador disponible");
+			if(empleado instanceof Director)
+				System.out.println("No hay Supervisor disponible");
 		}
-		System.out.println("No hay Operador disponible");
-		for(Empleado empleado : empleados) {
-			if(empleado instanceof Supervisor && empleado.isDisponible()) {
-				empleado.setDisponible(false);
-				return empleado;
-			}
-		}
-		System.out.println("No hay Supervisor disponible");
-		for(Empleado empleado : empleados) {
-			if(empleado instanceof Director && empleado.isDisponible()) {
-				empleado.setDisponible(false);
-				return empleado;
-			}
-		}
-		
-//		for(Empleado empleado : empleados) {
-//			if(empleado.isDisponible()) {
-//				empleado.setDisponible(false);
-//				return empleado;
-//			}
-//			if(empleado instanceof Supervisor)
-//				System.out.println("No hay Operador disponible");
-//			if(empleado instanceof Director)
-//				System.out.println("No hay Supervisor disponible");
-//		}
 		
 		System.out.println("No hay empleados disponibles");
 		return null;
