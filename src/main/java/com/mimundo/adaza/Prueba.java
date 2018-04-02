@@ -12,11 +12,16 @@ import com.mimundo.adaza.dto.Operador;
 import com.mimundo.adaza.dto.Supervisor;
 
 import junit.framework.TestCase;
-import junit.framework.TestResult;
 
+/**
+ * Clase de prueba
+ * @author dazaac
+ *
+ */
 public class Prueba extends TestCase {
 
 	public static void main(String[] args) {
+		// se inicializan los empleados como disponibles
 		List<Empleado> empleados = new ArrayList<Empleado>();
 		for (int i = 0; i < 3; i++) {
 			empleados.add(new Supervisor("Supervisor " + i));
@@ -31,7 +36,8 @@ public class Prueba extends TestCase {
 		Comparator<Empleado> porNivel = (o1, o2) -> o2.getNivel().compareTo(o1.getNivel());
 		Collections.sort(empleados, porNivel);
 		
-//        while(true) {        	
+//        while(true) {       
+		//Se envía la cantidad de llamadas
         	new Dispatcher(empleados, 15);        	
         	try {
 				Thread.sleep(1000);

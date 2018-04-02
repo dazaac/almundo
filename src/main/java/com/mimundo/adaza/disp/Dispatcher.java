@@ -24,8 +24,9 @@ public class Dispatcher extends Thread {
 	public Dispatcher(List<Empleado> empleados, int llamadas) {
 		System.out.println("Recibe " + llamadas + " llamadas");
 		Dispatcher.empleados = empleados;
+		// Se calcula el límite de llamadas que puede ejecutar a la vez
 		do {
-			int llamadasAtender = llamadas > limiteLlamadas ? llamadas : limiteLlamadas;
+			int llamadasAtender = llamadas < limiteLlamadas ? llamadas : limiteLlamadas;
 			ExecutorService ejes = Executors.newFixedThreadPool(llamadasAtender);
 			for(int i = 0 ; i < llamadasAtender ; i++) {
 				ejes.execute(new Dispatcher());
@@ -63,6 +64,7 @@ public class Dispatcher extends Thread {
 				}
 			}
 		}else {
+			// Si no hay empleados disponibles, espera 1 segundo para volver a consultar
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
